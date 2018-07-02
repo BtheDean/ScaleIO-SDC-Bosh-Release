@@ -1,7 +1,7 @@
 #!/bin/bash -exu
 
-tar xf libaio/libaio.tar.gz
+tar xf libaio/libaio-0.3.111.tar.gz
 
-pushd libaio-0.3.110-1
+pushd libaio-0.3.111
   make install prefix=${BOSH_INSTALL_TARGET}
 popd

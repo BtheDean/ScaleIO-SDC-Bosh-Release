@@ -4,4 +4,4 @@ name: libaio
 dependencies: []
 
 files:
-- libaio/libaio.tar.gz # From https://git.fedorahosted.org/cgit/libaio.git/snapshot/libaio-0.3.110-1.tar.gz
+- libaio/libaio.tar.gz # From https://releases.pagure.org/libaio/libaio-0.3.111.tar.gz

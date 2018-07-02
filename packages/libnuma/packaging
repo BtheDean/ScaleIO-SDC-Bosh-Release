@@ -27,7 +27,7 @@ popd
 
 tar xf libnuma/libnuma.tar.gz
 
-pushd numactl-2.0.10
+pushd numactl-2.0.12
   ./autogen.sh
   ./configure --prefix=${BOSH_INSTALL_TARGET}
   make
