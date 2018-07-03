@@ -1,29 +1,18 @@
----
-libaio/libaio.tar.gz:
-  object_id: 901835f2-fae1-4be5-bbd7-085e5c34c2ee
-  sha: 098fabb3e2000793c3b64587aa480642e2be40ca
-  size: 42271
-libnuma/autoconf.tar.gz:
-  object_id: 34bf9e11-0180-4f63-872d-c874916a6eee
-  sha: 562471cbcb0dd0fa42a76665acf0dbb68479b78a
+libaio/libaio-0.3.111.tar.gz:
+  size: 45093
+  sha: 6ec2b954831d35573fd7f38e2423304eb841b50c
+libnuma/autoconf-2.69.tar.gz:
   size: 1927468
-libnuma/automake.tar.gz:
-  object_id: 07442e43-8fc1-4a7f-ba27-a3c9f3e2c761
-  sha: b5a840c7ec4321e78fdc9472e476263fa6614ca1
+  sha: 562471cbcb0dd0fa42a76665acf0dbb68479b78a
+libnuma/automake-1.15.tar.gz:
   size: 2244206
-libnuma/libtool.tar.gz:
-  object_id: b44bec2b-abfb-4f78-8468-a9471fa72e23
-  sha: 25b6931265230a06f0fc2146df64c04e5ae6ec33
+  sha: b5a840c7ec4321e78fdc9472e476263fa6614ca1
+libnuma/libtool-2.4.6.tar.gz:
   size: 1806697
-libnuma/libnuma.tar.gz:
-  object_id: 7bc4f1e2-a67f-446f-8aab-7449eb3255ab
-  sha: 00675527d54491310b1e4eba5a7278d99681aec1
-  size: 99040
+  sha: 25b6931265230a06f0fc2146df64c04e5ae6ec33
+libnuma/numactl-2.0.12.tar.gz:
+  size: 423020
+  sha: 8576ef894d2c4d25adddd792593bcd92e711d86f
 scaleIO_kernel/sdc.tar.gz:
-  object_id: 8910e7c2-ab59-48ea-973d-44147004ecd5
-  sha: 471641f8971eccaa45355b4015187f9eb9854721
-  size: 2485515
-sds/sds.tar.gz:
-  object_id: ae644764-c3f5-4c01-9772-f25309e3da9d
-  sha: 463995050dfaea24a78aa995d44354ed6558b1f4
-  size: 4604776
+  size: 0
+  sha: da39a3ee5e6b4b0d3255bfef95601890afd80709

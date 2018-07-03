@@ -1,6 +1,6 @@
 ---
-final_name: scaleio-boshrelease
+final_name: scaleio-release
 blobstore:
-  provider: s3
+  provider: gcs
   options:
-    bucket_name: scaleio-sdc-bosh-release
+    bucket_name: scaleio-release
