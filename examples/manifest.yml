@@ -1,0 +1,12 @@
+---
+name: scaleio-release
+
+releases:
+- name: scaleio-release
+  version: 4.0
+
+addons:
+  - name: scaleio-release
+    jobs:
+    - name: scaleio-release
+      release: scaleio-release
