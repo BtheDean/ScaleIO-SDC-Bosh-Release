@@ -1,9 +1,0 @@
----
-name: sds
-
-dependencies:
-- libaio
-- libnuma
-
-files:
-- sds/sds.tar.gz # From ScaleIO

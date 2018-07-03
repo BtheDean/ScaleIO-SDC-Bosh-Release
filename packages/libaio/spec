@@ -4,4 +4,4 @@ name: libaio
 dependencies: []
 
 files:
-- libaio/libaio.tar.gz # From https://releases.pagure.org/libaio/libaio-0.3.111.tar.gz
+- libaio/libaio-0.3.111.tar.gz # From https://releases.pagure.org/libaio/libaio-0.3.111.tar.gz
