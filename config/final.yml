@@ -1,6 +1,6 @@
 ---
-final_name: scaleio2-release
+final_name: scaleio-release
 blobstore:
   provider: gcs
   options:
-    bucket_name: scaleio2-release
+    bucket_name: scaleio-release
