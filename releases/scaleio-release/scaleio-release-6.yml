@@ -1,0 +1,27 @@
+name: scaleio-release
+version: "6"
+commit_hash: 83ec6ec
+uncommitted_changes: true
+jobs:
+- name: setup_sdc
+  version: 0a4c4d7e423625aa38c94bb0ad7ffe1cec6ccee6
+  fingerprint: 0a4c4d7e423625aa38c94bb0ad7ffe1cec6ccee6
+  sha1: f6ebade1f9804594774a7fc91b085a8bc9afc64f
+packages:
+- name: libaio
+  version: 93660572225306e0d9e3c53a5e2bed7e9e1d628d
+  fingerprint: 93660572225306e0d9e3c53a5e2bed7e9e1d628d
+  sha1: c7190d6959754c11d41733370fe068d4ed84972b
+  dependencies: []
+- name: libnuma
+  version: ce029eb96360fb1d0ffd2a2337ac6b6a237fe3e2
+  fingerprint: ce029eb96360fb1d0ffd2a2337ac6b6a237fe3e2
+  sha1: 34b51bfdae4d704e4af535fbfb3a21299752f86e
+  dependencies: []
+- name: scaleIO_kernel
+  version: a6b76ee07d9dc9da67a0303c650a0c695402f4c7
+  fingerprint: a6b76ee07d9dc9da67a0303c650a0c695402f4c7
+  sha1: e6f751438a6ffc31766bcbed0311f407a999c537
+  dependencies:
+  - libaio
+  - libnuma

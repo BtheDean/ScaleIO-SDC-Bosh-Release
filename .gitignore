@@ -18,3 +18,4 @@ packages/**/*.tar.gz
 src/**/*.tar.gz
 .vscode/
 src/*
+logs/*

@@ -1,10 +1,18 @@
 builds:
+  15f7e27f-dab4-401b-789d-0db68cce2923:
+    version: "8"
   26706034-9c64-4286-7b90-f9ed6088c31b:
     version: "1"
   55eef8a0-21e9-4325-40de-0e3a11b37e1b:
     version: "3"
   57fd952f-4355-495d-4a08-29940624de76:
     version: "4"
+  90b5f012-01d8-4164-5c01-5166d8371164:
+    version: "7"
+  d7cb89e3-1ae4-4c46-76e2-50704125a33c:
+    version: "5"
   da9a63a5-d877-43a3-5df3-2879e4a048f6:
     version: "2"
+  fe8a6fad-7fcd-4715-580b-7c32a3382778:
+    version: "6"
 format-version: "2"

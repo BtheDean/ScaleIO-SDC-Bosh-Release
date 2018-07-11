@@ -1,12 +1,16 @@
----
-name: scaleio-release
 
 releases:
 - name: scaleio-release
-  version: 4.0
+  version: 8
 
 addons:
-  - name: scaleio-release
+  - name: scaleio
     jobs:
-    - name: scaleio-release
+    - name: setup_sdc
       release: scaleio-release
+      properties:
+        scaleio:
+          mdm:
+            ips: 
+              - 10.1.1.1
+

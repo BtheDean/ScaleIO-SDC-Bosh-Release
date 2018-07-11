@@ -1,0 +1,413 @@
+---
+addons:
+- jobs:
+  - name: kubo-dns-aliases
+    release: kubo
+  name: bosh-dns-aliases
+features:
+  use_dns_addresses: true
+instance_groups:
+- azs:
+  - AZ1
+  - AZ2
+  instances: 1
+  jobs:
+  - consumes:
+      cloud-provider:
+        from: master-cloud-provider
+    name: apply-specs
+    properties:
+      addons-spec: ''
+      admin-password: mNdDQamEu0Ef3C3BU96K13A5
+      admin-username: admin
+      api-token: "((kubelet-password))"
+      authorization-mode: rbac
+      tls:
+        heapster: "((tls-heapster))"
+        influxdb: "((tls-influxdb))"
+        kubernetes: "((tls-kubernetes))"
+        kubernetes-dashboard: "((tls-kubernetes-dashboard))"
+    release: kubo
+  - name: syslog_forwarder
+    properties:
+      syslog:
+        address: ''
+        ca_cert: 
+        migration:
+          disabled: false
+        permitted_peer: ''
+        port: '514'
+        tls_enabled: false
+        transport: tcp
+    release: syslog-migration
+  - name: wavefront-proxy-errand
+    properties:
+      authorization-mode: rbac
+      kubernetes-apiserver-ip: master.cfcr.internal
+      kubernetes-apiserver-port: 8443
+      wavefront-api-url: ignored
+      wavefront-token: ignored
+    release: wavefront-proxy
+  - name: telemetry-pod
+    properties:
+      interval: 10
+      telemetry_ip: 10.193.225.152
+      telemetry_url: telemetry.pks.internal:8011
+    release: pks-telemetry
+  lifecycle: errand
+  name: apply-addons
+  networks:
+  - name: VLAN3095
+  stemcell: trusty
+  vm_type: micro
+- azs:
+  - AZ1
+  - AZ2
+  instances: 1
+  jobs:
+  - name: bpm
+    release: bpm
+  - name: flanneld
+    release: kubo
+  - consumes:
+      cloud-provider:
+        from: master-cloud-provider
+    name: kube-apiserver
+    properties:
+      admin-password: mNdDQamEu0Ef3C3BU96K13A5
+      admin-username: admin
+      authorization-mode: rbac
+      backend_port: 8443
+      kube-controller-manager-password: "((kube-controller-manager-password))"
+      kube-proxy-password: "((kube-proxy-password))"
+      kube-scheduler-password: "((kube-scheduler-password))"
+      kubelet-drain-password: "((kubelet-drain-password))"
+      kubelet-password: "((kubelet-password))"
+      port: 8443
+      route-sync-password: "((route-sync-password))"
+      service-account-public-key: "((service-account-key.public_key))"
+      tls:
+        kubernetes:
+          ca: "((tls-kubernetes.ca))"
+          certificate: "((tls-kubernetes.certificate))"
+          private_key: "((tls-kubernetes.private_key))"
+    release: kubo
+  - consumes:
+      cloud-provider:
+        from: master-cloud-provider
+    name: kube-controller-manager
+    properties:
+      api-token: "((kube-controller-manager-password))"
+      cluster-signing: "((kubo_ca))"
+      service-account-private-key: "((service-account-key.private_key))"
+      tls:
+        kubernetes: "((tls-kubernetes))"
+    release: kubo
+  - name: kube-scheduler
+    properties:
+      api-token: "((kube-scheduler-password))"
+      tls:
+        kubernetes: "((tls-kubernetes))"
+    release: kubo
+  - consumes:
+      cloud-provider:
+        from: master-cloud-provider
+    name: kubernetes-roles
+    properties:
+      admin-password: mNdDQamEu0Ef3C3BU96K13A5
+      admin-username: admin
+      authorization-mode: rbac
+      tls:
+        kubernetes: "((tls-kubernetes))"
+    release: kubo
+  - name: etcd
+    properties:
+      etcd:
+        dns_suffix: etcd.cfcr.internal
+      tls:
+        etcd:
+          ca: "((tls-etcd-v0-17-0.ca))"
+          certificate: "((tls-etcd-v0-17-0.certificate))"
+          private_key: "((tls-etcd-v0-17-0.private_key))"
+        etcdctl:
+          ca: "((tls-etcdctl.ca))"
+          certificate: "((tls-etcdctl.certificate))"
+          private_key: "((tls-etcdctl.private_key))"
+        peer:
+          ca: "((tls-etcd-v0-17-0.ca))"
+          certificate: "((tls-etcd-v0-17-0.certificate))"
+          private_key: "((tls-etcd-v0-17-0.private_key))"
+    release: cfcr-etcd
+  - name: smoke-tests
+    release: kubo
+  - name: cloud-provider
+    properties:
+      cloud-provider:
+        type: vsphere
+        vsphere:
+          datacenter: Datacenter
+          datastore: LUN01
+          insecure-flag: 1
+          password: Sfe36dCGCiAaZZuqeW!
+          server: 10.193.225.11
+          user: administrator@vsphere.local
+          vms: pcf_vms
+          working-dir: "/Datacenter/vm/pcf_vms/ece66a5f-7a9c-4dc9-85a2-35f5adbdd80d"
+    provides:
+      cloud-provider:
+        as: master-cloud-provider
+    release: kubo
+  - name: syslog_forwarder
+    properties:
+      syslog:
+        address: ''
+        ca_cert: 
+        migration:
+          disabled: false
+        permitted_peer: ''
+        port: '514'
+        tls_enabled: false
+        transport: tcp
+    release: syslog-migration
+  name: master
+  networks:
+  - name: VLAN3095
+  persistent_disk_type: '10240'
+  stemcell: trusty
+  vm_extensions:
+  - public_ip
+  vm_type: medium
+- azs:
+  - AZ1
+  - AZ2
+  instances: 3
+  jobs:
+  - name: flanneld
+    release: kubo
+  - name: docker
+    properties:
+      bridge: cni0
+      default_ulimits:
+      - nofile=65536
+      env: {}
+      flannel: true
+      ip_masq: false
+      iptables: false
+      log_level: error
+      log_options:
+      - max-size=128m
+      - max-file=2
+      storage_driver: overlay
+      store_dir: "/var/vcap/store"
+      tls_cacert: "((tls-docker.ca))"
+      tls_cert: "((tls-docker.certificate))"
+      tls_key: "((tls-docker.private_key))"
+    release: docker
+  - name: kubernetes-dependencies
+    release: kubo
+  - name: kubelet
+    properties:
+      api-token: "((kubelet-password))"
+      cloud-provider: vsphere
+      drain-api-token: "((kubelet-drain-password))"
+      tls:
+        kubelet: "((tls-kubelet))"
+        kubernetes: "((tls-kubernetes))"
+    release: kubo
+  - name: kube-proxy
+    properties:
+      api-token: "((kube-proxy-password))"
+      cloud-provider: vsphere
+      tls:
+        kubernetes: "((tls-kubernetes))"
+    release: kubo
+  - name: drain-cluster
+    release: pks-helpers
+  - name: syslog_forwarder
+    properties:
+      syslog:
+        address: ''
+        ca_cert: 
+        migration:
+          disabled: false
+        permitted_peer: ''
+        port: '514'
+        tls_enabled: false
+        transport: tcp
+    release: syslog-migration
+  - name: wavefront-proxy-images
+    release: wavefront-proxy
+  - consumes:
+      pks_telemetry:
+        deployment: pivotal-container-service-0fbccc4699b57d8e67c3
+        from: pks_telemetry
+    name: telemetry-images
+    properties:
+      telemetry_ca: |-
+        -----BEGIN CERTIFICATE-----
+        MIIDJDCCAgygAwIBAgIUONG+qU/C27/n1s1+nxTIhvICdCgwDQYJKoZIhvcNAQEL
+        BQAwDTELMAkGA1UEAxMCY2EwHhcNMTgwNjI5MjA0MTIzWhcNMTkwNjI5MjA0MTIz
+        WjANMQswCQYDVQQDEwJjYTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+        AML66jdBnDCNlo9VRdEymameFUDuHWCsiDwtKtbPCbQfH4bB1rf8vlpb2nRCfY6f
+        u+6mgiobMYtT4NejtPZNZ4XjGsRakAlhVUSW/TBlM8Udo5Vd2tQPaPWX/RJWsXmP
+        kK/YTnxmaZ4XvZGOwVGXQ4KSc4Q4PXhn7Yc2z/8Vyht3tGwcmjr1Fwlw73ocvSkb
+        EXL31W22f08Smb75NlNS6HJH42S71IfS9gp+N0UGFZI8F05F/8xYYteojdA7Z80t
+        gQUZoeztsCcCO3Vzmj7xtH0wV2k0HTTbE/DdDnSkhDdwP/bYkBLhiBrlMT6tjZkW
+        SMrlhJ57C92jR4jeYHVCBK0CAwEAAaN8MHowHQYDVR0OBBYEFKHOd1oAGkUAhDqW
+        XpNdskH+/wq4MEgGA1UdIwRBMD+AFKHOd1oAGkUAhDqWXpNdskH+/wq4oRGkDzAN
+        MQswCQYDVQQDEwJjYYIUONG+qU/C27/n1s1+nxTIhvICdCgwDwYDVR0TAQH/BAUw
+        AwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAdBo7mLEUU2hAay8ttvTtslDgTEji63TE
+        Z2FuHtxAgIBTFKrHeZMKDfWJQZ3yN5hYanAhZMb9owctWKMEpEfjYZ6qzBESGQII
+        mJCpzPipN1BqQKJKztzZm2rFGAutP70wy5RjBWbKwNc5jnstPzzuIVDcnlcq5f+V
+        tSPWjVWMsXnUV2b0mNqaZyHOVYXyYjEXewyQdR2VsQQGouzZZvikG/Pp2qAb450Z
+        gZGo5Ccwnu4EqK+XPyjCh8xJ+4Gqb8+8GTlBU6LlQc6UodJgbJWvmv8hTFKPnsWv
+        7zR0pUljj/vMwE3dNFS3xKX0HbfFZ52B4XUjmnm2qqnWvNifaGDnig==
+        -----END CERTIFICATE-----
+    release: pks-telemetry
+  name: worker
+  networks:
+  - name: VLAN3095
+  persistent_disk_type: '10240'
+  stemcell: trusty
+  vm_extensions:
+  - disk_enable_uuid
+  - public_ip
+  vm_type: medium
+name: service-instance_1d15f4fd-2f05-46b9-8010-f8ff5db1fa79
+properties:
+  kubernetes-api-url: https://nonha.pks.haas-161.pez.pivotal.io:8443
+releases:
+- name: kubo
+  version: 0.17.0
+- name: cfcr-etcd
+  version: 1.3.1
+- name: docker
+  version: 32.0.0
+- name: pks-nsx-t
+  version: 0.21.0
+- name: pks-vrli
+  version: 0.3.0
+- name: pks-telemetry
+  version: 0.9.0
+- name: syslog-migration
+  version: 11.1.1
+- name: bpm
+  version: 0.6.0
+- name: wavefront-proxy
+  version: 0.6.0
+- name: pks-helpers
+  version: 28.0.0
+stemcells:
+- alias: trusty
+  os: ubuntu-trusty
+  version: '3586.24'
+update:
+  canaries: 1
+  canary_watch_time: 10000-300000
+  max_in_flight: 1
+  serial: true
+  update_watch_time: 10000-300000
+variables:
+- name: kubelet-password
+  type: password
+- name: kubelet-drain-password
+  type: password
+- name: kube-proxy-password
+  type: password
+- name: kube-controller-manager-password
+  type: password
+- name: kube-scheduler-password
+  type: password
+- name: route-sync-password
+  type: password
+- name: kubo_ca
+  options:
+    common_name: ca
+    is_ca: true
+  type: certificate
+- name: tls-kubelet
+  options:
+    alternative_names: []
+    ca: kubo_ca
+    common_name: kubelet.cfcr.internal
+    organization: system:nodes
+  type: certificate
+- name: tls-kubernetes
+  options:
+    alternative_names:
+    - 10.100.200.1
+    - kubernetes
+    - kubernetes.default
+    - kubernetes.default.svc
+    - kubernetes.default.svc.cluster.local
+    - master.cfcr.internal
+    - nonha.pks.haas-161.pez.pivotal.io
+    ca: "/p-bosh/pivotal-container-service-0fbccc4699b57d8e67c3/kubo_odb_ca"
+    common_name: nonha.pks.haas-161.pez.pivotal.io
+    organization: system:masters
+  type: certificate
+- name: service-account-key
+  type: rsa
+- name: tls-docker
+  options:
+    ca: kubo_ca
+    common_name: docker.cfcr.internal
+  type: certificate
+- name: tls-etcd-v0-17-0
+  options:
+    ca: kubo_ca
+    common_name: "*.etcd.cfcr.internal"
+    extended_key_usage:
+    - client_auth
+    - server_auth
+  type: certificate
+- name: tls-etcdctl
+  options:
+    ca: kubo_ca
+    common_name: etcdClient
+    extended_key_usage:
+    - client_auth
+  type: certificate
+- name: tls-heapster
+  options:
+    alternative_names:
+    - heapster.kube-system.svc.cluster.local
+    ca: kubo_ca
+    common_name: heapster
+  type: certificate
+- name: tls-influxdb
+  options:
+    alternative_names: []
+    ca: kubo_ca
+    common_name: monitoring-influxdb
+  type: certificate
+- name: kubernetes-dashboard-ca
+  options:
+    common_name: ca
+    is_ca: true
+  type: certificate
+- name: tls-kubernetes-dashboard
+  options:
+    alternative_names: []
+    ca: kubernetes-dashboard-ca
+    common_name: kubernetesdashboard.cfcr.internal
+  type: certificate
+- name: "/dns_api_tls_ca"
+  options:
+    common_name: dns-api-tls-ca
+    is_ca: true
+  type: certificate
+- name: "/dns_api_server_tls"
+  options:
+    ca: "/dns_api_tls_ca"
+    common_name: api.bosh-dns
+    extended_key_usage:
+    - server_auth
+  type: certificate
+- name: "/dns_api_client_tls"
+  options:
+    ca: "/dns_api_tls_ca"
+    common_name: api.bosh-dns
+    extended_key_usage:
+    - client_auth
+  type: certificate
