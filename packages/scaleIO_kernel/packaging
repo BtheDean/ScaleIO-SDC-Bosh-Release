@@ -2,3 +2,5 @@
 
 tar xf scaleIO_kernel/sdc.tar.gz
 cp -r drv_cfg scini.ko ${BOSH_INSTALL_TARGET}
+chmod a+x ${BOSH_INSTALL_TARGET}/drv_cfg
+
