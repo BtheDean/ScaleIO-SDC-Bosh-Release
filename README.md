@@ -14,22 +14,19 @@ ScaleIO contains 3 major components:
 
  ```
  git clone https://github.com/EMC-CMD/ScaleIO-SDC-Bosh-Release.git
- cd ScaleIO-SDC-Bosh-Release
+ cd https://github.com/mcowger/ScaleIO-SDC-Bosh-Release
  bosh create release
  ```
-### About CF-Persistence
-In order to set up CF-Persistence, the SDC, RexRay, and Volman bosh releases need to colocate in Diego Cells VMs. More documentation coming soon.
+
 
 ### Deploying Scaleio SDC release
 * Git clone this project into your working directory
 ```
 cd ~/workspace
-git clone https://github.com/EMC-CMD/ScaleIO-SDC-Bosh-Release
+git clone https://github.com/mcowger/ScaleIO-SDC-Bosh-Release
 cd ~/workspace/ScaleIO-SDC-Bosh-Release
 ```
-* Upload Bosh stemcell
-```
-bosh upload stemcell https://bosh.io/d/stemcells/bosh-aws-xen-hvm-ubuntu-trusty-go_agent?v=3215
+
 ```
 * Use manifest from template folder
 
@@ -44,6 +41,8 @@ bosh -n deploy
 ```
 
 ### Contact
-- Email: [EMCDojo@emc.com](mailto:EMCDojo@emc.com) 
-- Twitter: [@EMCDojo](https://twitter.com/hashtag/emcdojo)
-- Blog: [EMC Dojo Blog](http://dojoblog.emc.com)
+ - Matt Cowger (mcowger@pivotal.io)
+
+### Acknowledgements
+ - Based heavily on work done by the EMC Dojo team, Gary White, and Paul Blum
+ - Lots of help from Stuart Charlton
